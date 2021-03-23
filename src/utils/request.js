@@ -31,3 +31,29 @@ export const getIndexGoods = () => {
         url: baseURL + '/api/getindexgoods'
     })
 }
+
+//分类树
+export const getCate = () => {
+    return axios({
+        method: "get",
+        url: baseURL + '/api/getcatetree'
+    })
+}
+
+//分类商品
+export const getGoods = (params) => {
+    return axios({
+        method: "get",
+        url: baseURL + '/api/getgoods',
+        params
+    })
+}
+
+//会员注册
+export const register = (data) => {
+    return axios({
+        method: 'post',
+        url: baseURL + '/api/register',
+        data: qs.stringify(data)
+    })
+}

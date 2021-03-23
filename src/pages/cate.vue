@@ -1,28 +1,63 @@
 <template>
   <div>
     <van-nav-bar
-      title="标题"
+      title="分类"
       left-text="返回"
       left-arrow
       @click-left="$router.go(-1)"
     />
-
     <van-sidebar v-model="activeKey">
-      <van-sidebar-item title="标签名称" />
-      <van-sidebar-item title="标签名称" />
-      <van-sidebar-item title="标签名称" />
+      <van-sidebar-item
+        v-for="(item, index) in firstCate"
+        :key="item.id"
+        :title="item.catename"
+        @click="changeCate(index)"
+      />
     </van-sidebar>
+
+    <div class="main">
+      <van-grid :border="false" :column-num="3">
+        <van-grid-item v-for="item in secondCate" :key="item.id" :to="`/goodsList?fid=${item.id}`">
+          <van-image :src="$preImg+item.img" />
+          <p>{{item.catename}}</p>
+        </van-grid-item>
+      </van-grid>
+    </div>
   </div>
 </template>
 
 <script>
+import { getCate } from "../utils/request";
 export default {
-   data() {
+  data() {
     return {
       activeKey: 0,
+      firstCate: [],
+      secondCate: []
     };
   },
+  methods: {
+    requestCate() {
+      getCate().then(res => {
+        this.firstCate = res.data.list;
+        this.changeCate(0)
+      });
+    },
+    changeCate(index) {
+      this.secondCate = this.firstCate[index].children;
+    }
+  },
+  mounted() {
+    this.requestCate();
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+.main{
+  position: absolute;
+  right: 0;
+  top: 50px;
+  margin-left: 80px;
+}
+</style>
