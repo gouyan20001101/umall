@@ -13,8 +13,9 @@
         height="10rem"
         src="https://img01.yzcdn.cn/vant/cat.jpeg"
       />
+      <div>{{user.nickname}}</div>
     </div>
-    <van-button type="danger" block>安全退出</van-button>
+    <van-button type="danger" block @click="logout">安全退出</van-button>
     <div class="main">
       <van-cell title="我的收藏" is-link />
       <van-cell title="我的评论" is-link />
@@ -24,7 +25,24 @@
 </template>
 
 <script>
-export default {};
+import {mapGetters,mapActions} from 'vuex'
+export default {
+  computed:{
+    ...mapGetters({
+      "user":"user"
+    })
+  },
+  methods:{
+    ...mapActions({
+      "requestUser":"userActions"
+    }),
+    logout(){
+      this.requestUser(null)
+      this.$toast.success('退出成功')
+      this.$router.push('/login')
+    }
+  }
+};
 </script>
 
 <style scoped>

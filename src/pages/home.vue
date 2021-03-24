@@ -19,7 +19,7 @@
         >
           
           <template #footer>
-            <van-button type='primary' size="small" icon='cart-o'></van-button>
+            <van-button type='primary' size="small" icon='cart-o' @click="add(item.id)"></van-button>
           </template>
         </van-card>
       </van-tab>
@@ -34,7 +34,7 @@
         >
           
           <template #footer>
-            <van-button type='primary' size="small" icon='cart-o'></van-button>
+            <van-button type='primary' size="small" icon='cart-o' @click="add(item.id)"></van-button>
           </template>
         </van-card>
       </van-tab>
@@ -49,7 +49,7 @@
         >
           
           <template #footer>
-            <van-button type='primary' size="small" icon='cart-o'></van-button>
+            <van-button type='primary' size="small" icon='cart-o' @click="add(item.id)"></van-button>
           </template>
         </van-card>
       </van-tab>
@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import {getBanner,getIndexGoods} from '../utils/request'
+import {mapGetters,mapActions} from 'vuex'
+import {getBanner,getIndexGoods,addCart} from '../utils/request'
 export default {
   data() {
     return {
@@ -68,7 +69,15 @@ export default {
       goodsList:[{content:[]},{content:[]},{content:[]}]
     };
   },
+  computed:{
+    ...mapGetters({
+      "user":"user"
+    })
+  },
   methods:{
+    ...mapActions({
+      "requestCart":"cartListActions"
+    }),
     reqBanner(){
       getBanner().then(res=>{
         // console.log(res);
@@ -78,6 +87,18 @@ export default {
     requestIndexGoods(){
       getIndexGoods().then(res=>{
         this.goodsList = res.data.list
+      })
+    },
+    add(goodsid){
+      var data = {
+        uid:this.user.uid,
+        num:1,
+        goodsid
+      }
+      //发起购物车添加请求
+      addCart(data).then(res=>{
+        this.$toast.success('添加成功')
+        this.requestCart(this.user.uid)
       })
     }
 

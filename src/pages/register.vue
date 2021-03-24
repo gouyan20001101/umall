@@ -2,7 +2,7 @@
   <div>
     <van-nav-bar
       title="欢迎注册"
-      right-text="注册"
+      right-text="登陆"
       @click-right="$router.push('/login')"
     />
 
